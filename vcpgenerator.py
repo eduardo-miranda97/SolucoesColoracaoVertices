@@ -25,15 +25,15 @@ saida[-1] = saida[-1].replace(' +', ';')
 saida.append('subject to')
 
 for v in V:
-    saida.append(f'r{next(r)}: ' + ' + '.join(f'x_{v}_{i}' for i in I) + ' = 1;')
+    saida.append(f'r{next(r)}: ' +
+                 ' + '.join(f'x_{v}_{i}' for i in I) +
+                 ' = 1;')
 
 for (u, v), i in product(E, I):
     saida.append(f'r{next(r)}: x_{u}_{i} + x_{v}_{i} <= w_{i};')
 
 saida.append('solve;')
-
-for i in I:
-    saida.append('display ' + ' + '.join(f'w_{i}' for i in I) + ';')
+saida.append('display ' + ' + '.join(f'w_{i}' for i in I) + ';')
 
 with open(sys.argv[2], 'w') as f:
     f.write('\n'.join(saida))
