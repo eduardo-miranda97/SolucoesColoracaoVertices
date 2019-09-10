@@ -1,20 +1,13 @@
 import sys
 from itertools import product, count
 
-E = set()
-r = count()
+from reader import read_graph
 
-with open(sys.argv[1]) as f:
-    for line in f:
-        line = (line.replace('\n', '')).split(' ')
-        if (line[0] == 'e'):
-            E.add((line[1], line[2]))
-        if (line[0] == 'p'):
-            H = int(line[2])
-
+H, E = read_graph(sys.argv[1])
 I = [i+1 for i in range(H)]
 V = [i+1 for i in range(H)]
 
+r = count()
 saida = []
 
 for v, i in product(V, I):
@@ -40,9 +33,8 @@ for (u, v), i in product(E, I):
 saida.append('solve;')
 
 for i in I:
-    saida.append('display ' + ' + '.join(f'w_{i}' for i in I) + ';') 
+    saida.append('display ' + ' + '.join(f'w_{i}' for i in I) + ';')
 
 with open(sys.argv[2], 'w') as f:
     f.write('\n'.join(saida))
     f.write('\n')
-

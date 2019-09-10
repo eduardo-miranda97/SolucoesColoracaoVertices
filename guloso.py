@@ -1,30 +1,23 @@
 import sys
-from itertools import product, count
+from itertools import count, product
+from random import sample
 
-E = set()
+from reader import read_graph
 
-with open(sys.argv[1]) as f:
-    for line in f:
-        line = (line.replace('\n', '')).split(' ')
-        if (line[0] == 'e'):
-            E.add((line[1], line[2]))
-        if (line[0] == 'p'):
-            H = int(line[2])
+H, E = read_graph(sys.argv[1])
 
-vizinhos = dict()
+vertex_neighbors = dict()
+for edge, (i, j) in product(E, ((0, 1), (1, 0))):
+    vertex_neighbors.setdefault(edge[i], set()).add(edge[j])
 
-for edge in E:
-    vizinhos.setdefault(edge[0], set()).add(edge[1])
-    vizinhos.setdefault(edge[1], set()).add(edge[0])
-
-cores = dict()
-
-for vertex, neighbors in vizinhos.items():
+colors = dict()
+for vertex, neighbors in sample(vertex_neighbors.items(),
+                                k=len(vertex_neighbors)):
     for i in count():
-        if all(cores.get(n, None) != i for n in neighbors):
-            cores[vertex] = i
+        if all(colors.get(n, None) != i
+               for n in sample(neighbors, k=len(neighbors))):
+            colors[vertex] = i
             break
 
-print(cores)
-print(max(cores.values()) + 1)
-
+print(colors)
+print(max(colors.values()) + 1)
