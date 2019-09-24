@@ -15,3 +15,8 @@ subject to one_color {v in V}:
 subject to unique_color {(u, v) in E, i in I}:
     x[u, i] + x[v, i] <= w[i];
 
+subject to dont_know {i in I}:
+    w[i] <= sum {v in V} x[v, i];
+
+subject to min_number {i in 2..H}:
+    w[i] <= w[i-1];
