@@ -1,4 +1,9 @@
-def read_graph(filename):
+from __future__ import annotations
+
+from typing import Tuple, Set
+
+
+def read_graph(filename: str) -> Tuple[int, Set[Tuple[int, int]]]:
     edges = set()
     with open(filename) as f:
         for line in f:
