@@ -2,14 +2,11 @@ from __future__ import annotations
 
 from collections import defaultdict
 from itertools import combinations, product
-from random import random, seed
+from random import random
 from typing import Any, Dict, Iterator, Set, Tuple
 
 
-def generate_graph(num_nodes: int, density: float, seed_: int = None):
-
-    if seed_:
-        seed(seed_)
+def generate_graph(num_nodes: int, density: float):
 
     num_edges = 0
     neighbors = defaultdict(set)
@@ -53,14 +50,12 @@ def export_dot(uni_neighbors: Dict[int, Set[int]]) -> str:
     return '\n'.join(('graph {', node_params, '\n'.join(output), '}'))
 
 
-def tuples_to_dict_uni(edges: Iterator[Tuple[int, int]]):
-    return {i: j for i, j in edges}
+def tuples_to_dict(edges: Iterator[Tuple[int, int]]):
 
-
-def tuples_to_dict_bi(edges: Iterator[Tuple[int, int]]):
-    vertex_neighbors = dict()
+    vertex_neighbors = {}
     for edge, (i, j) in product(edges, ((0, 1), (1, 0))):
         vertex_neighbors.setdefault(edge[i], set()).add(edge[j])
+
     return vertex_neighbors
 
 
