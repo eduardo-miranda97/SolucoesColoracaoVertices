@@ -3,12 +3,13 @@ from __future__ import annotations
 from collections import defaultdict
 from itertools import count
 from random import sample
-from typing import Dict, List, Tuple
+from typing import Callable, Dict, List, Tuple
 
 from graph import Graph
 
 NodeOrder = List[int]
 NodeColors = Dict[int, int]
+Solver = Callable[[Graph], Tuple[NodeOrder, NodeColors]]
 
 
 def greedy1(vertex_neighbors: Graph) -> Tuple[NodeOrder, NodeColors]:
