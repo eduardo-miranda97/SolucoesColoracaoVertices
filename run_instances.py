@@ -1,8 +1,11 @@
 import os
 from concurrent.futures import as_completed, ProcessPoolExecutor
 from itertools import chain, product
+from math import sqrt
 from time import perf_counter
-from typing import Any, Callable, List
+from typing import Any, List
+
+import numpy
 
 from graph import tuples_to_dict, Graph
 from reader import read_graph
@@ -54,10 +57,32 @@ def objective_function(colors: NodeColors) -> int:
     return max(colors.values()) + 1
 
 
+def generate_summary():
+    output = ['inst\tmin\tmed\tmax\tsd\tvar']
+
+    for filename in filter(
+            lambda s: not s.startswith('_') and s.endswith('.txt'),
+            os.listdir('out')):
+
+        print(filename)
+        instance = '-'.join(filename.split('-')[:-1])
+        with open(f'out/{filename}') as file:
+            values = [int(l.split('\t')[2]) for l in file if l.strip()]
+        min_, max_ = min(values), max(values)
+        mean = numpy.mean(values)
+        var = numpy.var(values)
+        sdev = sqrt(var)
+        output.append(f'{instance}\t{min_}\t{mean}\t{max_}\t{var}\t{sdev}')
+
+    with open('out/_summary.txt', 'w') as file:
+        file.write('\n'.join(output))
+
+
 def main():
     for filename, func in product(os.listdir('all-instances'), FUNCTIONS):
         print(filename)
         run_instance(f'all-instances/{filename}', None, func)
+    generate_summary()
 
 
 if __name__ == '__main__':

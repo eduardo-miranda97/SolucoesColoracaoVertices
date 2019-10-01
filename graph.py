@@ -53,10 +53,11 @@ def export_dot(uni_neighbors: Graph) -> str:
     return '\n'.join(('graph {', node_params, '\n'.join(output), '}'))
 
 
-def tuples_to_dict(edges: Iterator[Edge]) -> Graph:
+def tuples_to_dict(edges: Iterator[Edge], digraph: bool = True) -> Graph:
 
     vertex_neighbors = {}
-    for edge, (i, j) in product(edges, ((0, 1), (1, 0))):
+    directions = ((0, 1), (1, 0)) if digraph else ((0, 1),)
+    for edge, (i, j) in product(edges, directions):
         vertex_neighbors.setdefault(edge[i], set()).add(edge[j])
 
     return vertex_neighbors
