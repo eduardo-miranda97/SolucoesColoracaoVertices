@@ -38,7 +38,7 @@ export default {
     };
   },
   methods: {
-    addBoxPlot(content) {
+    addBoxPlot(content, fileName) {
       let lines = content.split("\n");
       let y0 = lines.map(d => parseInt(d.split("\t").slice(-2)[0]));
       y0 = y0.filter(d => Number.isInteger(d));
@@ -46,7 +46,7 @@ export default {
       var trace1 = {
         y: y0,
         type: "box",
-        name: this.data.length
+        name: fileName
       };
 
       this.data.push(trace1)
@@ -54,7 +54,7 @@ export default {
         Plotly.newPlot("boxplot", this.data);
       });
     },
-    addHistogram(content) {
+    addHistogram(content, fileName) {
       let lines = content.split("\n");
       let y0 = lines.map(d => parseInt(d.split("\t").slice(-2)[0]));
       y0 = y0.filter(d => Number.isInteger(d));
@@ -62,7 +62,7 @@ export default {
       var trace1 = {
         x: y0,
         type: "histogram",
-        name: this.data.length
+        name: fileName
       };
 
       this.data.push(trace1)
@@ -76,9 +76,9 @@ export default {
         var reader = new FileReader();
         reader.readAsText(file, "UTF-8");
         if (this.mode == 'BoxPlot') {
-          reader.onload = evt => this.addBoxPlot(evt.target.result);
+          reader.onload = evt => this.addBoxPlot(evt.target.result, file.name);
         } else {
-          reader.onload = evt => this.addHistogram(evt.target.result);
+          reader.onload = evt => this.addHistogram(evt.target.result, file.name);
         }
       });
     }
