@@ -30,7 +30,7 @@ def run_instance(filename: str, params: Any, func: Solver,
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(loop, graph, filename, params, func,
                                    total_iterations // executor._max_workers)
-                   for _ in range(total_iterations)]
+                   for _ in range(executor._max_workers)]
         output = [f.result() for f in as_completed(futures)]
 
     with open(out_filename(filename, func), 'a') as file:
