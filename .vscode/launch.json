@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "run_instances",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_instances.py",
+            "console": "integratedTerminal"
+        }
+    ]
+}

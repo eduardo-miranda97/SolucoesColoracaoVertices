@@ -5,6 +5,9 @@ from itertools import combinations, product
 from random import random
 from typing import Any, Dict, Iterator, Set, Tuple
 
+Edge = Tuple[int, int]
+Graph = Dict[int, Set[int]]
+
 
 def generate_graph(num_nodes: int, density: float):
 
@@ -20,7 +23,7 @@ def generate_graph(num_nodes: int, density: float):
 
 
 def export_col(num_nodes: int, num_edges: int,
-               uni_neighbors: Dict[int, Set[int]],
+               uni_neighbors: Graph,
                extra: Dict[str, Any]) -> str:
 
     output = [f'c {k}: {v}' for k, v in extra.items()]
@@ -34,7 +37,7 @@ def export_col(num_nodes: int, num_edges: int,
     return '\n'.join(output)
 
 
-def export_dot(uni_neighbors: Dict[int, Set[int]]) -> str:
+def export_dot(uni_neighbors: Graph) -> str:
 
     output = []
     for source, dests in uni_neighbors:
@@ -50,7 +53,7 @@ def export_dot(uni_neighbors: Dict[int, Set[int]]) -> str:
     return '\n'.join(('graph {', node_params, '\n'.join(output), '}'))
 
 
-def tuples_to_dict(edges: Iterator[Tuple[int, int]]):
+def tuples_to_dict(edges: Iterator[Edge]) -> Graph:
 
     vertex_neighbors = {}
     for edge, (i, j) in product(edges, ((0, 1), (1, 0))):
@@ -59,7 +62,7 @@ def tuples_to_dict(edges: Iterator[Tuple[int, int]]):
     return vertex_neighbors
 
 
-def uni_to_bi(graph: Dict[int, Set[int]]) -> Dict[int, Set[int]]:
+def uni_to_bi(graph: Graph) -> Graph:
 
     result = {}
 

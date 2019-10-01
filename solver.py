@@ -1,19 +1,17 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from itertools import count
 from random import sample
 from typing import Dict, List, Tuple
 
-from graph import tuples_to_dict
-from reader import read_graph
+from graph import Graph
 
 NodeOrder = List[int]
 NodeColors = Dict[int, int]
 
 
-def greedy1(filename: str) -> Tuple[NodeOrder, NodeColors]:
-
-    _, edges = read_graph(filename)
-    vertex_neighbors = tuples_to_dict(edges)
+def greedy1(vertex_neighbors: Graph) -> Tuple[NodeOrder, NodeColors]:
 
     order = []
     colors = {}
@@ -28,13 +26,10 @@ def greedy1(filename: str) -> Tuple[NodeOrder, NodeColors]:
     return order, colors
 
 
-def greedy2(filename: str) -> Tuple[NodeOrder, NodeColors]:
-
-    _, edges = read_graph(filename)
-    neighbors = tuples_to_dict(edges)
+def greedy2(vertex_neighbors: Graph) -> Tuple[NodeOrder, NodeColors]:
 
     inv_degree = defaultdict(list)
-    for i, neighbors_ in neighbors.items():
+    for i, neighbors_ in vertex_neighbors.items():
         inv_degree[len(neighbors_)].append(i)
 
     order = []
@@ -48,7 +43,7 @@ def greedy2(filename: str) -> Tuple[NodeOrder, NodeColors]:
                          if c not in neighbor_colors[node])
             colors[node] = color
             order.append(node)
-            for neighbor in neighbors[node]:
+            for neighbor in vertex_neighbors[node]:
                 neighbor_colors[neighbor].add(color)
 
     return order, colors
