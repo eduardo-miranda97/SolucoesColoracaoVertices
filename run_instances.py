@@ -1,5 +1,5 @@
 import os
-from concurrent.futures import as_completed, ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from itertools import chain, product
 from math import sqrt
 from time import perf_counter
@@ -7,11 +7,11 @@ from typing import Any, List
 
 import numpy
 
-from graph import tuples_to_dict, Graph
+from graph import Graph, tuples_to_dict
 from reader import read_graph
-from solver import greedy2, NodeColors, Solver
+from solver import Solver, greedy1, greedy2
 
-FUNCTIONS = (greedy2,)
+FUNCTIONS = (greedy1, greedy2)
 
 
 def loop(graph: Graph, filename: str, params: Any, func: Solver,
@@ -19,10 +19,10 @@ def loop(graph: Graph, filename: str, params: Any, func: Solver,
     output = []
     for _ in range(iterations):
         start_time = perf_counter()
-        _, colors = func(graph)
+        solution = func(graph)
         diff = perf_counter() - start_time
         output.append(f'{os.path.basename(filename)}\t{params}\t'
-                      f'{objective_function(colors)}\t{diff:.5f}')
+                      f'{solution.colors_count}\t{diff:.5f}')
     return output
 
 
@@ -53,10 +53,6 @@ def out_filename(in_filename: str, func: Solver):
     return f'out/{basename}-{func.__name__}.txt'
 
 
-def objective_function(colors: NodeColors) -> int:
-    return max(colors.values()) + 1
-
-
 def generate_summary():
     output = ['inst\tmin\tmed\tmax\tsd\tvar']
 
@@ -64,7 +60,6 @@ def generate_summary():
             lambda s: not s.startswith('_') and s.endswith('.txt'),
             os.listdir('out')):
 
-        print(filename)
         instance = '-'.join(filename.split('-')[:-1])
         with open(f'out/{filename}') as file:
             values = [int(l.split('\t')[2]) for l in file if l.strip()]
@@ -80,7 +75,7 @@ def generate_summary():
 
 def main():
     for filename, func in product(os.listdir('all-instances'), FUNCTIONS):
-        print(filename)
+        print(filename, func.__name__)
         run_instance(f'all-instances/{filename}', None, func)
     generate_summary()
 
