@@ -8,13 +8,14 @@ from typing import Any, List
 import numpy
 
 from graph import Graph, tuples_to_dict
+from greedy import greedy1, greedy2
 from reader import read_graph
-from solver import Solver, greedy1, greedy2
+from solution import solver
 
 FUNCTIONS = (greedy1, greedy2)
 
 
-def loop(graph: Graph, filename: str, params: Any, func: Solver,
+def loop(graph: Graph, filename: str, params: Any, func: solver,
          iterations: int) -> List[str]:
     output = []
     for _ in range(iterations):
@@ -26,7 +27,7 @@ def loop(graph: Graph, filename: str, params: Any, func: Solver,
     return output
 
 
-def run_instance(filename: str, params: Any, func: Solver,
+def run_instance(filename: str, params: Any, func: solver,
                  total_iterations: int = 100):
     graph = init_graph(filename)
 
@@ -47,7 +48,7 @@ def init_graph(filename: str) -> Graph:
     return vertex_neighbors
 
 
-def out_filename(in_filename: str, func: Solver):
+def out_filename(in_filename: str, func: solver):
     basename = '.'.join(os.path.basename(in_filename).split(".")[:-1])
 
     return f'out/{basename}-{func.__name__}.txt'

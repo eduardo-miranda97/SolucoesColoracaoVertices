@@ -1,6 +1,6 @@
 from __future__ import annotations
-from solver import Solution
 
+from solution import Solution
 
 SWAP = 1
 SHIFT = 2
@@ -18,7 +18,6 @@ def annealing(solution: Solution, alpha: float, amount_neighboors: int,
             for _ in range(amount_neighboors):
                 n_solution = generate_neighboor(neighboor_structure,
                                                 best_solution)
-
                 # Calc do criterio de boltsman
 
     return best_solution
