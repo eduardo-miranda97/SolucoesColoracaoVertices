@@ -67,7 +67,7 @@ def uni_to_bi(graph: Graph) -> Graph:
 
     result = {}
 
-    for source, dests in graph:
+    for source, dests in graph.items():
         for dest in dests:
             result[dest] = source
 
