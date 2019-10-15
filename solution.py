@@ -4,6 +4,7 @@ from collections import defaultdict
 from copy import copy
 from itertools import count
 from typing import Dict, Iterator, List
+from numpy import roll
 
 from graph import Graph
 
@@ -56,6 +57,29 @@ class Solution:
 
     def calculate_colors_count(self):
         self._colors_count = max(self.node_colors.values()) + 1
+
+    def swap_by_position(self, position1: int, position2: int) -> Solution:
+        self.node_order[position1], self.node_order[position2] = (
+        self.node_order[position2] , self.node_order[position1])
+        self._node_colors, self._colors_count = None, None
+                
+    def delete_insert(self, position1: int, position2: int) -> Solution:
+        solution = self.copy()
+        value = solution.node_order.pop(position1)
+        solution.node_order.insert(position2, value)
+        self._node_colors, self._colors_count = None, None
+        return solution
+
+    def swapped_by_position(self, position1: int, position2: int):
+        solution = self.copy()
+        solution.swap_by_position(position1, position2)
+        return solution
+
+    def shift_solution(self, amount:int) -> Solution:
+        solution = self.copy()
+        solution.node_order = roll(solution.node_order, amount)
+        self._node_colors, self._colors_count = None, None
+        return solution
 
     def swap(self, node: int, position: int):
         node_position = self.inv_node_order[node]

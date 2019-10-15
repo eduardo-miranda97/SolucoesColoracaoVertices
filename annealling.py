@@ -1,0 +1,82 @@
+from __future__ import annotations
+
+from solution import Solution
+from math import exp
+from random import uniform, randint
+
+SWAP = 1
+SHIFT = 2
+DELETE_INSERT = 3
+
+
+def annealing(solution: Solution, alpha: float, amount_neighbors: int,
+              initial_temp: float, final_temp: float,
+              reheat_times: int, neighbor_structure: int) -> Solution:
+    best_solution = solution
+    current_solution = solution
+    for _ in range(reheat_times):
+        temperature = initial_temp
+        while temperature > final_temp:
+            temperature *= alpha
+            for _ in range(amount_neighbors):
+                n_solution = generate_neighbor(neighbor_structure,
+                                                best_solution)
+                delta = n_solution.colors_count - current_solution.colors_count
+                
+                if(delta < 0):
+                
+                        # Aceita de cara
+                        current_solution = n_solution.copy()
+
+                        # Verifica se é melhor do que a overall
+                        if n_solution.colors_count < best_solution.colors_count:
+
+                            # Atualiza a overall
+                            best_solution = n_solution.copy()
+                            #print("\n\tUpdate Melhor em ", str(TCorrente), " com Obj = ", str(SolMelhor.Objetivo()), "\n")
+                            #print(SolMelhor)
+
+                else:
+
+                    # Gera numero uniforme r ~ U(0,1)
+                    r = uniform(0,1)
+
+                    # Testa o criterio de Boltzmann
+                    if r <= exp(-delta/temperature) :
+                        # Aceita uma solucao pior
+                        current_solution = n_solution.copy()
+
+            # Decai a temperatura
+            temperature = temperature * alpha
+
+        #Reinicia a soluçaõ corrente para a melhor solução atual
+        current_solution = best_solution.copy()
+
+    return best_solution
+
+
+def generate_neighbor(neighbor_structure: int,
+                       solution: Solution) -> Solution:
+    if neighbor_structure == SWAP:
+        maximo = len(solution.graph)-1
+        pos1 = randint(0,maximo)
+        pos2 = pos1
+        while (pos1 == pos2):
+            pos2 = randint(0, maximo)
+
+        return solution.swapped_by_position(pos1, pos2)
+
+    if neighbor_structure == DELETE_INSERT:
+        maximo = len(solution.graph)-1
+        pos1 = randint(0,maximo)
+        pos2 = pos1
+        while (pos1 == pos2):
+            pos2 = randint(0, maximo)
+
+        return solution.delete_insert(pos1, pos2)
+
+    if neighbor_structure == SHIFT:
+        amount = randint(0, len(solution.graph)-1)
+        return solution.shift_solution(amount)
+
+    return None
