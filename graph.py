@@ -12,65 +12,59 @@ Graph = Dict[int, Set[int]]
 def generate_graph(num_nodes: int, density: float):
 
     num_edges = 0
-    neighbors = defaultdict(set)
+    graph = defaultdict(set)
 
-    for i, j in combinations(range(int(num_nodes)), 2):
+    for i, j in combinations(range(num_nodes), 2):
         if i != j and random() < float(density):
             num_edges += 1
-            neighbors[i].add(j)
+            graph[i].add(j)
+            graph[j].add(i)
 
-    return num_edges, neighbors
+    return num_edges, graph
 
 
-def export_col(num_nodes: int, num_edges: int,
-               uni_neighbors: Graph,
+def export_col(num_nodes: int, num_edges: int, graph: Graph,
                extra: Dict[str, Any]) -> str:
 
     output = [f'c {k}: {v}' for k, v in extra.items()]
 
     output.append(f'\np edge {num_nodes} {num_edges}')
 
-    for source, dests in uni_neighbors:
-        for dest in dests:
-            output.append(f'e {source} {dest}')
+    for source, dest in dict_to_tuples(graph):
+        output.append(f'e {source} {dest}')
 
     return '\n'.join(output)
 
 
-def export_dot(uni_neighbors: Graph) -> str:
+def export_dot(graph: Graph) -> str:
 
     output = []
-    for source, dests in uni_neighbors:
-        for dest in dests:
-            output.append(f'{source} -- {dest}')
-
-    bi_neighbors = uni_to_bi(uni_neighbors)
+    for source, dest in dict_to_tuples(graph):
+        output.append(f'{source} -- {dest}')
 
     node_params = '\n'.join(
         f'{i} [label={len(j)}]'
-        for i, j in bi_neighbors.items())
+        for i, j in graph.items())
 
     return '\n'.join(('graph {', node_params, '\n'.join(output), '}'))
 
 
-def tuples_to_dict(edges: Iterator[Edge], digraph: bool = True) -> Graph:
+def tuples_to_dict(edges: Iterator[Edge]) -> Graph:
 
-    vertex_neighbors = {}
-    directions = ((0, 1), (1, 0)) if digraph else ((0, 1),)
+    graph = defaultdict(set)
+    directions = ((0, 1), (1, 0))
     for edge, (i, j) in product(edges, directions):
-        vertex_neighbors.setdefault(edge[i], set()).add(edge[j])
+        graph[edge[i]].add(edge[j])
 
-    return vertex_neighbors
+    return graph
 
 
-def uni_to_bi(graph: Graph) -> Graph:
+def dict_to_tuples(graph: Graph) -> Set[Edge]:
 
-    result = {}
+    edges = set()
+    for node, neighbors in graph:
+        for neighbor in neighbors:
+            edges.add((node, neighbor) if node < neighbor
+                      else (neighbor, node))
 
-    for source, dests in graph.items():
-        for dest in dests:
-            result[dest] = source
-
-    result.update(graph)
-
-    return result
+    return edges
