@@ -33,8 +33,9 @@ def annealing(solution: Solution, alpha: float, amount_neighbors: int,
 
                             # Atualiza a overall
                             best_solution = n_solution.copy()
-                            #print("\n\tUpdate Melhor em ", str(TCorrente), " com Obj = ", str(SolMelhor.Objetivo()), "\n")
-                            #print(SolMelhor)
+                            temperature
+                            print("\n\tUpdate Melhor em ", str(temperature), " com Obj = ", str(n_solution.colors_count), "\n")
+                            #print(n_solution)
 
                 else:
 
