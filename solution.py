@@ -3,7 +3,9 @@ from __future__ import annotations
 from collections import defaultdict
 from copy import copy
 from itertools import count
+from random import shuffle
 from typing import Dict, Iterator, List
+
 from numpy import roll
 
 from graph import Graph
@@ -62,7 +64,7 @@ class Solution:
         self.node_order[position1], self.node_order[position2] = (
         self.node_order[position2] , self.node_order[position1])
         self._node_colors, self._colors_count = None, None
-                
+
     def delete_insert(self, position1: int, position2: int) -> Solution:
         solution = self.copy()
         value = solution.node_order.pop(position1)
@@ -101,3 +103,9 @@ class Solution:
 
 def solver(graph: Graph, lazy: bool = False) -> Solution:
     raise NotImplementedError()
+
+
+def random_solution(graph: Graph) -> Solution:
+    node_order = list(range(1, len(graph) + 1))
+    shuffle(node_order)
+    return Solution(graph, node_order)

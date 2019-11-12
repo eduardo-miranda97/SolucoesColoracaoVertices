@@ -1,15 +1,21 @@
 from __future__ import annotations
 
-from solution import Solution
 from math import exp
 from random import uniform, randint
+
+from graph import Graph
+from solution import Solution, random_solution
 
 SWAP = 1
 SHIFT = 2
 DELETE_INSERT = 3
 
 
-def annealing(solution: Solution, alpha: float, amount_neighbors: int,
+def annealing_standalone(graph: Graph, **kwargs) -> Solution:
+    return annealing(random_solution(graph), **kwargs)
+
+
+def annealing(solution: Solution, alpha: float = 0.9, amount_neighbors: int,
               initial_temp: float, final_temp: float,
               reheat_times: int, neighbor_structure: int) -> Solution:
     best_solution = solution
@@ -22,9 +28,9 @@ def annealing(solution: Solution, alpha: float, amount_neighbors: int,
                 n_solution = generate_neighbor(neighbor_structure,
                                                 best_solution)
                 delta = n_solution.colors_count - current_solution.colors_count
-                
+
                 if(delta < 0):
-                
+
                         # Aceita de cara
                         current_solution = n_solution.copy()
 

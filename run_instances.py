@@ -7,12 +7,13 @@ from typing import Any, List
 
 import numpy
 
+from annealing import annealing_standalone
 from graph import Graph, tuples_to_dict
-from greedy import greedy1, greedy2
 from reader import read_graph
 from solution import solver
 
-FUNCTIONS = (greedy1, greedy2)
+FUNCTIONS = (annealing_standalone)
+ARGUMENTS = ({})
 
 
 def loop(graph: Graph, filename: str, params: Any, func: solver,
@@ -20,7 +21,7 @@ def loop(graph: Graph, filename: str, params: Any, func: solver,
     output = []
     for _ in range(iterations):
         start_time = perf_counter()
-        solution = func(graph)
+        solution = func(graph, **params)
         diff = perf_counter() - start_time
         output.append(f'{os.path.basename(filename)}\t{params}\t'
                       f'{solution.colors_count}\t{diff:.5f}')
@@ -75,9 +76,10 @@ def generate_summary():
 
 
 def main():
-    for filename, func in product(os.listdir('all-instances'), FUNCTIONS):
+    for filename, (func, args) in product(os.listdir('benchmarks'),
+                                          zip(FUNCTIONS, ARGUMENTS)):
         print(filename, func.__name__)
-        run_instance(f'all-instances/{filename}', None, func)
+        run_instance(f'benchmarks/{filename}', args, func)
     generate_summary()
 
 
