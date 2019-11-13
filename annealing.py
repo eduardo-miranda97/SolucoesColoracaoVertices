@@ -15,15 +15,14 @@ def annealing_standalone(graph: Graph, **kwargs) -> Solution:
     return annealing(random_solution(graph), **kwargs)
 
 
-def annealing(solution: Solution, alpha: float = 0.9, amount_neighbors: int,
-              initial_temp: float, final_temp: float,
-              reheat_times: int, neighbor_structure: int) -> Solution:
+def annealing(solution: Solution, alpha: float = 0.9, amount_neighbors: int = 10,
+              initial_temp: float = 100, final_temp: float = 10,
+              reheat_times: int = 1, neighbor_structure: int = 1) -> Solution:
     best_solution = solution
     current_solution = solution
     for _ in range(reheat_times):
         temperature = initial_temp
         while temperature > final_temp:
-            temperature *= alpha
             for _ in range(amount_neighbors):
                 n_solution = generate_neighbor(neighbor_structure,
                                                 best_solution)
@@ -39,8 +38,8 @@ def annealing(solution: Solution, alpha: float = 0.9, amount_neighbors: int,
 
                             # Atualiza a overall
                             best_solution = n_solution.copy()
-                            temperature
-                            print("\n\tUpdate Melhor em ", str(temperature), " com Obj = ", str(n_solution.colors_count), "\n")
+                            #temperature
+                            #print("\n\tUpdate Melhor em ", str(temperature), " com Obj = ", str(n_solution.colors_count), "\n")
                             #print(n_solution)
 
                 else:
