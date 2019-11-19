@@ -12,8 +12,8 @@ from graph import Graph, tuples_to_dict
 from reader import read_graph
 from solution import solver
 
-FUNCTIONS = (annealing_standalone)
-ARGUMENTS = ({})
+FUNCTIONS = [annealing_standalone]
+ARGUMENTS = [{}]
 
 
 def loop(graph: Graph, filename: str, params: Any, func: solver,

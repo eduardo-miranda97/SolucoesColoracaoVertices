@@ -1,9 +1,10 @@
 from itertools import chain
 from math import log
+from random import shuffle
 from typing import Iterator, List, Optional, Tuple
 
-from random import shuffle
-from solution import Solution
+from graph import Graph
+from solution import Solution, random_solution
 
 Step = Tuple[int, int]
 
@@ -46,3 +47,7 @@ def path_relinking(source: Solution, target: Solution,
             tries -= 1
 
     return min(chain.from_iterable(solutions), key=lambda s: s.colors_count)
+
+
+def path_relinking_standalone(graph: Graph, **kwargs) -> Solution:
+    return path_relinking(random_solution(graph), random_solution(graph))

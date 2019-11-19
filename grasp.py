@@ -24,11 +24,7 @@ def grasp_construction_phase(graph: Graph, rcl_size: int = 5,
     for i, neighbors_ in graph.items():
         inv_degree[len(neighbors_)].append(i)
 
-    order = []
-    for node_ in rcl_iterator(graph, inv_degree, rcl_size):
-        # nodes = inv_degree[degree_]
-        # random.shuffle(nodes)
-        order.append(node_)
+    order = rcl_iterator(graph, inv_degree, rcl_size)
 
     solution = Solution(graph, order)
     if not lazy:
