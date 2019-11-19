@@ -9,6 +9,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "test_grasp",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test_grasp.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",

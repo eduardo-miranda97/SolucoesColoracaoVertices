@@ -8,12 +8,13 @@ from solution import Solution
 from graph import Graph
 
 
-def grasp(graph: Graph, 
-          max_iterations_without_improvements: int = 100) -> Solution:
+def grasp(graph: Graph,
+          max_iterations_without_improvements: int = 100,
+          ) -> Solution:
     iterations = 0
     while iterations < max_iterations_without_improvements:
         solution = grasp_construction_phase(graph)
-        print(solution.node_order)
+
         iterations += 1
 
 
@@ -24,10 +25,10 @@ def grasp_construction_phase(graph: Graph, rcl_size: int = 5,
         inv_degree[len(neighbors_)].append(i)
 
     order = []
-    for degree_ in rcl_iterator(graph, inv_degree, rcl_size):
-        nodes = inv_degree[degree_]
-        random.shuffle(nodes)
-        order.extend(nodes)
+    for node_ in rcl_iterator(graph, inv_degree, rcl_size):
+        # nodes = inv_degree[degree_]
+        # random.shuffle(nodes)
+        order.append(node_)
 
     solution = Solution(graph, order)
     if not lazy:

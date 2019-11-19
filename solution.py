@@ -62,7 +62,7 @@ class Solution:
 
     def swap_by_position(self, position1: int, position2: int) -> Solution:
         self.node_order[position1], self.node_order[position2] = (
-        self.node_order[position2] , self.node_order[position1])
+        self.node_order[position2], self.node_order[position1])
         self._node_colors, self._colors_count = None, None
 
     def delete_insert(self, position1: int, position2: int) -> Solution:
@@ -77,7 +77,7 @@ class Solution:
         solution.swap_by_position(position1, position2)
         return solution
 
-    def shift_solution(self, amount:int) -> Solution:
+    def shift_solution(self, amount: int) -> Solution:
         solution = self.copy()
         solution.node_order = roll(solution.node_order, amount)
         self._node_colors, self._colors_count = None, None
