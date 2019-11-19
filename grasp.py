@@ -4,22 +4,20 @@ from itertools import islice
 from typing import List, Dict, Iterator
 from collections import defaultdict
 
-from solution import Solution
 from graph import Graph
-
-from local_search import local_search
+from local_search import local_search_function
+from solution import Solution
 
 
 def grasp(graph: Graph,
-          max_iterations_without_improvements: int = 10,
-          ) -> Solution:
+          local_search: local_search_function = lambda x: x,
+          max_iterations_without_improvements: int = 10) -> Solution:
     iterations = 0
     best_sol = None
     while iterations < max_iterations_without_improvements:
         solution = grasp_construction_phase(graph)
+        solution = local_search(solution)
 
-        solution = local_search(solution, annealing=False)
-        
         if (best_sol is None or solution.colors_count < best_sol.colors_count):
             best_sol = solution
 
