@@ -1,7 +1,7 @@
 from random import shuffle
 
 from graph import generate_graph
-import annealling as ann
+import local_search as lc
 from solution import Solution
 
 VERTEXES = 2000
@@ -11,7 +11,7 @@ AMOUNT_NEIGHBORS = 7
 INITIAL_TEMP = 100
 FINAL_TEMP = 10
 REHEAT_TIMES = 2
-NEIGHBOR_STRUCTURE = ann.SHIFT
+NEIGHBOR_STRUCTURE = lc.SHIFT
 
 
 def test_simulated_annealling():
@@ -20,7 +20,7 @@ def test_simulated_annealling():
     shuffle(order)
     solution1 = Solution(graph, order)
 
-    best_solution = ann.annealing(solution1, ALPHA, AMOUNT_NEIGHBORS,
+    best_solution = lc.local_search(solution1, ALPHA, AMOUNT_NEIGHBORS,
     INITIAL_TEMP, FINAL_TEMP, REHEAT_TIMES, NEIGHBOR_STRUCTURE)
 
     print('Inicial solution = ' + str(solution1.colors_count))

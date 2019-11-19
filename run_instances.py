@@ -7,7 +7,7 @@ from typing import Any, List
 
 import numpy
 
-from annealing import annealing_standalone
+from local_search import annealing_standalone
 from graph import Graph, tuples_to_dict
 from reader import read_graph
 from solution import solver
