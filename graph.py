@@ -14,7 +14,7 @@ def generate_graph(num_nodes: int, density: float):
     num_edges = 0
     graph = defaultdict(set)
 
-    for i, j in combinations(range(num_nodes), 2):
+    for i, j in combinations(range(1, num_nodes + 1), 2):
         if i != j and random() < float(density):
             num_edges += 1
             graph[i].add(j)

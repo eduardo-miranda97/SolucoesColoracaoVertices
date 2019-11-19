@@ -1,27 +1,45 @@
 from __future__ import annotations
 import random
-from itertools import islice
-from typing import List, Dict, Iterator
 from collections import defaultdict
+from itertools import islice
+from random import sample
+from typing import List, Dict, Iterator
 
 from graph import Graph
 from local_search import local_search_function
-from solution import Solution
+from path_relinking import path_relinking
+from solution import Solution, random_solution
+
+ELITE_SET_SIZE = 10
 
 
 def grasp(graph: Graph,
           local_search: local_search_function = lambda x: x,
-          max_iterations_without_improvements: int = 10) -> Solution:
+          max_iterations_without_improvements: int = 10,
+          use_path_relinking: bool = False) -> Solution:
     iterations = 0
     best_sol = None
+
+    if use_path_relinking:
+        elite = [random_solution(graph) for _ in range(ELITE_SET_SIZE)]
+
     while iterations < max_iterations_without_improvements:
         solution = grasp_construction_phase(graph)
         solution = local_search(solution)
 
-        if (best_sol is None or solution.colors_count < best_sol.colors_count):
-            best_sol = solution
+        if use_path_relinking:
+            relinked = path_relinking(solution, sample(elite, 1)[0])
+            if relinked.colors_count > solution.colors_count:
+                solution = relinked
+            elite.append(relinked)
+            elite.sort(key=lambda s: -s.colors_count)
+            elite.pop()
 
-        iterations += 1
+        if best_sol is None or solution.colors_count < best_sol.colors_count:
+            best_sol = solution
+            iterations = 0
+        else:
+            iterations += 1
 
     return best_sol
 

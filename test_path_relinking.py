@@ -5,7 +5,7 @@ from path_relinking import path_relinking
 from solution import Solution
 
 VERTEXES = 100
-DENSITY = 0.4
+DENSITY = 0.5
 
 
 def test_path_relinking():
