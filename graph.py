@@ -49,12 +49,20 @@ def export_dot(graph: Graph) -> str:
     return '\n'.join(('graph {', node_params, '\n'.join(output), '}'))
 
 
-def tuples_to_dict(edges: Iterator[Edge]) -> Graph:
+def tuples_to_dict(vertices: int, edges: Iterator[Edge]) -> Graph:
 
+    missing = set(range(1, vertices + 1))
     graph = defaultdict(set)
     directions = ((0, 1), (1, 0))
     for edge, (i, j) in product(edges, directions):
         graph[edge[i]].add(edge[j])
+        try:
+            missing.remove(edge[i])
+        except KeyError:
+            pass
+
+    for key in missing:
+        graph[key]
 
     return graph
 

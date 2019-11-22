@@ -79,8 +79,8 @@ def local_search_function(solution: Solution) -> Solution:
 def generate_neighbor(neighbor_structure: int,
                       solution: Solution) -> Solution:
     if neighbor_structure == SWAP:
-        maximo = len(solution.graph)-1
-        pos1 = randint(0,maximo)
+        maximo = len(solution.graph) - 1
+        pos1 = randint(0, maximo)
         pos2 = pos1
         while pos1 == pos2:
             pos2 = randint(0, maximo)
@@ -89,7 +89,7 @@ def generate_neighbor(neighbor_structure: int,
 
     if neighbor_structure == DELETE_INSERT:
         maximo = len(solution.graph)-1
-        pos1 = randint(0,maximo)
+        pos1 = randint(0, maximo)
         pos2 = pos1
         while pos1 == pos2:
             pos2 = randint(0, maximo)

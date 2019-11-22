@@ -31,6 +31,15 @@ def loop(graph: Graph, filename: str, params: Any, func: solver,
 def run_instance(filename: str, params: Any, func: solver,
                  total_iterations: int = 100):
     graph = init_graph(filename)
+    output = loop(graph, filename, params, func, total_iterations)
+    with open(out_filename(filename, func), 'a') as file:
+        file.write('\n'.join(output))
+        file.write('\n')
+
+
+def run_instance_multiprocess(filename: str, params: Any, func: solver,
+                              total_iterations: int = 100):
+    graph = init_graph(filename)
 
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(loop, graph, filename, params, func,
@@ -44,8 +53,8 @@ def run_instance(filename: str, params: Any, func: solver,
 
 
 def init_graph(filename: str) -> Graph:
-    _, edges = read_graph(filename)
-    vertex_neighbors = tuples_to_dict(edges)
+    vertices, edges = read_graph(filename)
+    vertex_neighbors = tuples_to_dict(vertices, edges)
     return vertex_neighbors
 
 
@@ -79,7 +88,7 @@ def main():
     for filename, (func, args) in product(os.listdir('benchmarks'),
                                           zip(FUNCTIONS, ARGUMENTS)):
         print(filename, func.__name__)
-        run_instance(f'benchmarks/{filename}', args, func)
+        run_instance_multiprocess(f'benchmarks/{filename}', args, func)
     generate_summary()
 
 
