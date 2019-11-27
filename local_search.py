@@ -34,13 +34,13 @@ def _local_search(solution: Solution, alpha: float = 0.9,
                 if delta < 0:
 
                     # Aceita de cara
-                    current_solution = n_solution.copy()
+                    current_solution = n_solution
 
                     # Verifica se é melhor do que a overall
                     if n_solution.colors_count < best_solution.colors_count:
 
                         # Atualiza a overall
-                        best_solution = n_solution.copy()
+                        best_solution = n_solution
                         # temperature
                         # print("\n\tUpdate Melhor em ", str(temperature), " com Obj = ", str(n_solution.colors_count), "\n")
                         # print(n_solution)
@@ -53,13 +53,13 @@ def _local_search(solution: Solution, alpha: float = 0.9,
                         # Testa o criterio de Boltzmann
                         if r <= exp(-delta/temperature):
                             # Aceita uma solucao pior
-                            current_solution = n_solution.copy()
+                            current_solution = n_solution
 
             # Decai a temperatura
             temperature = temperature * alpha
 
         # Reinicia a solução corrente para a melhor solução atual
-        current_solution = best_solution.copy()
+        current_solution = best_solution
 
     return best_solution
 
@@ -80,24 +80,24 @@ def generate_neighbor(neighbor_structure: int,
                       solution: Solution) -> Solution:
     if neighbor_structure == SWAP:
         maximo = len(solution.graph) - 1
-        pos1 = randint(0, maximo)
+        pos1 = randint(1, maximo)
         pos2 = pos1
         while pos1 == pos2:
-            pos2 = randint(0, maximo)
+            pos2 = randint(1, maximo)
 
         return solution.swapped_by_position(pos1, pos2)
 
     if neighbor_structure == DELETE_INSERT:
         maximo = len(solution.graph)-1
-        pos1 = randint(0, maximo)
+        pos1 = randint(1, maximo)
         pos2 = pos1
         while pos1 == pos2:
-            pos2 = randint(0, maximo)
+            pos2 = randint(1, maximo)
 
         return solution.delete_insert(pos1, pos2)
 
     if neighbor_structure == SHIFT:
-        amount = randint(0, len(solution.graph)-1)
+        amount = randint(1, len(solution.graph)-1)
         return solution.shift_solution(amount)
 
     return None

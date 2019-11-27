@@ -20,6 +20,8 @@ def generate_graph(num_nodes: int, density: float):
             graph[i].add(j)
             graph[j].add(i)
 
+    graph = dict(graph)
+
     return num_edges, graph
 
 
@@ -64,7 +66,7 @@ def tuples_to_dict(vertices: int, edges: Iterator[Edge]) -> Graph:
     for key in missing:
         graph[key]
 
-    return graph
+    return dict(graph)
 
 
 def dict_to_tuples(graph: Graph) -> Set[Edge]:
